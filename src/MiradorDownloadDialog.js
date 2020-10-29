@@ -62,8 +62,10 @@ export class MiradorDownloadDialog extends Component {
       infoResponse,
       open,
       restrictDownloadOnSizeDefinition,
+      restrictDownload,
       viewType,
       windowId,
+      t,
     } = this.props;
 
     if (!open) return ('');
@@ -80,7 +82,7 @@ export class MiradorDownloadDialog extends Component {
           maxWidth="xs"
         >
           <DialogTitle disableTypography className={classes.h2}>
-            <Typography variant="h2">Download</Typography>
+            <Typography variant="h2">{t('download')}</Typography>
           </DialogTitle>
           <ScrollIndicatedDialogContent>
             {canvases.map(canvas => (
@@ -90,18 +92,20 @@ export class MiradorDownloadDialog extends Component {
                 classes={classes}
                 infoResponse={infoResponse(canvas.id)}
                 restrictDownloadOnSizeDefinition={restrictDownloadOnSizeDefinition}
+                restrictDownload={restrictDownload}
                 key={canvas.id}
                 viewType={viewType}
                 windowId={windowId}
+                t={t}
               />
             ))}
             {this.renderings().length > 0
-              && <ManifestDownloadLinks classes={classes} renderings={this.renderings()} />
+              && <ManifestDownloadLinks classes={classes} renderings={this.renderings()} t={t} />
             }
           </ScrollIndicatedDialogContent>
           <DialogActions>
             <Button onClick={closeDialog} color="primary">
-              Close
+              {t('close')}
             </Button>
           </DialogActions>
         </Dialog>
@@ -127,14 +131,18 @@ MiradorDownloadDialog.propTypes = {
   }),
   open: PropTypes.bool,
   restrictDownloadOnSizeDefinition: PropTypes.bool,
+  restrictDownload: PropTypes.bool,
   viewType: PropTypes.string.isRequired,
   windowId: PropTypes.string.isRequired,
+  t: PropTypes.func,
 };
 MiradorDownloadDialog.defaultProps = {
   canvases: [],
   manifest: {},
   open: false,
   restrictDownloadOnSizeDefinition: false,
+  restrictDownload: false,
+  t: key => key,
 };
 
 const styles = () => ({

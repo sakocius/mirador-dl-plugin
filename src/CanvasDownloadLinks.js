@@ -14,20 +14,22 @@ import RenderingDownloadLink from './RenderingDownloadLink';
 */
 export default class CanvasDownloadLinks extends Component {
   zoomedImageLabel() {
+    const { t } = this.props;
+
     const bounds = this.currentBounds();
-    return `Zoomed region (${Math.floor(bounds.width)} x ${Math.floor(bounds.height)}px)`;
+    return `${t('zoomedRegion')} (${Math.floor(bounds.width)} x ${Math.floor(bounds.height)}px)`;
   }
 
   fullImageLabel() {
-    const { canvas } = this.props;
+    const { canvas, t } = this.props;
 
-    return `Whole image (${canvas.getWidth()} x ${canvas.getHeight()}px)`;
+    return `${t('wholeImage')} (${canvas.getWidth()} x ${canvas.getHeight()}px)`;
   }
 
   smallImageLabel() {
-    const { canvas } = this.props;
+    const { canvas, t } = this.props;
 
-    return `Whole image (1000 x ${Math.floor((1000 * canvas.getHeight()) / canvas.getWidth())}px)`;
+    return `${t('wholeImage')} (1000 x ${Math.floor((1000 * canvas.getHeight()) / canvas.getWidth())}px)`;
   }
 
   zoomedImageUrl() {
@@ -134,11 +136,13 @@ export default class CanvasDownloadLinks extends Component {
   }
 
   linksForDefinedSizes() {
+    const { t } = this.props;
+
     return (
       this.definedSizes().map(size => (
         <ListItem disableGutters divider key={`${size.width}${size.height}`}>
           <Link href={this.imageUrlForSize(size)} rel="noopener noreferrer" target="_blank" variant="body1">
-            {`Whole image (${size.width} x ${size.height}px)`}
+            {`${t('wholeImage')} (${size.width} x ${size.height}px)`}
           </Link>
         </ListItem>
       ))
@@ -153,6 +157,7 @@ export default class CanvasDownloadLinks extends Component {
       canvas,
       canvasLabel,
       classes,
+      t,
     } = this.props;
 
     return (
@@ -173,7 +178,7 @@ export default class CanvasDownloadLinks extends Component {
           {this.definedSizes().length > 0
             && (this.linksForDefinedSizes())}
           {canvas.getRenderings().map(rendering => (
-            <RenderingDownloadLink rendering={rendering} key={rendering.id} />
+            <RenderingDownloadLink rendering={rendering} key={rendering.id} t={t} />
           ))}
         </List>
       </React.Fragment>
@@ -205,4 +210,8 @@ CanvasDownloadLinks.propTypes = {
   restrictDownloadOnSizeDefinition: PropTypes.bool.isRequired,
   viewType: PropTypes.string.isRequired,
   windowId: PropTypes.string.isRequired,
+  t: PropTypes.func,
+};
+CanvasDownloadLinks.defaultProps = {
+  t: key => key,
 };
